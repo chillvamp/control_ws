@@ -11,10 +11,10 @@ class PoseController(Node):
         self.create_subscription(PoseWithCovarianceStamped, '/amcl_pose', self.pose_callback, 10)
         
         # Subscribe to the clicked goal point
-        self.create_subscription()
+        self.create_subscription
         
-        # Publisher for velocity commands  
-        self.cmd_vel_pub = self.create_publisher(  )
+        # Publisher for velocity commands
+        self.cmd_vel_pub = self.create_publisher
         
         self.current_pose = None
         self.goal_pose = None
@@ -40,14 +40,12 @@ class PoseController(Node):
         goal_x, goal_y = self.goal_pose.x, self.goal_pose.y
         
         # Compute error
-
-
+        
         
         # Compute desired heading
-
+        
         
         # Get current yaw from quaternion
-
         q = self.current_pose.orientation
         yaw = math.atan2(2.0 * (q.w * q.z + q.x * q.y), 1.0 - 2.0 * (q.y**2 + q.z**2))
         
@@ -55,14 +53,17 @@ class PoseController(Node):
         
         # Control gains (adjust as needed)
         
+        
         # Compute control signals
         cmd_vel = Twist()
         if distance > 0.1:  # Only move if far enough from the goal
+            print ("Not too close to start")
+            
         
         # Stop if very close
         if distance < 0.05:
-
-
+            cmd_vel.linear.x = 0.0
+            cmd_vel.angular.z = 0.0
             self.goal_pose = None  # Goal reached
         
         # Publish command
