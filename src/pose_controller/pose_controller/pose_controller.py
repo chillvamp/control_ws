@@ -11,10 +11,10 @@ class PoseController(Node):
         self.create_subscription(PoseWithCovarianceStamped, '/amcl_pose', self.pose_callback, 10)
         
         # Subscribe to the clicked goal point
-        self.create_subscription(PointStamped, '/clicked_point', self.goal_callback, 10)
+        self.create_subscription()
         
-        # Publisher for velocity commands
-        self.cmd_vel_pub = self.create_publisher(Twist, '/cmd_vel', 10)
+        # Publisher for velocity commands  
+        self.cmd_vel_pub = self.create_publisher(  )
         
         self.current_pose = None
         self.goal_pose = None
@@ -40,40 +40,34 @@ class PoseController(Node):
         goal_x, goal_y = self.goal_pose.x, self.goal_pose.y
         
         # Compute error
-        dx = goal_x - x
-        dy = goal_y - y
-        distance = math.sqrt(dx**2 + dy**2)
+
+
         
         # Compute desired heading
-        target_theta = math.atan2(dy, dx)
+
         
         # Get current yaw from quaternion
+
         q = self.current_pose.orientation
         yaw = math.atan2(2.0 * (q.w * q.z + q.x * q.y), 1.0 - 2.0 * (q.y**2 + q.z**2))
         
         # Compute angular error
-        angle_error = target_theta - yaw
-        angle_error = math.atan2(math.sin(angle_error), math.cos(angle_error))  # Normalize
         
         # Control gains (adjust as needed)
-        Kp_linear = 0.5
-        Kp_angular = 1.5
         
         # Compute control signals
         cmd_vel = Twist()
         if distance > 0.1:  # Only move if far enough from the goal
-            cmd_vel.linear.x = min(Kp_linear * distance, 0.5)  # Limit max speed
-            cmd_vel.angular.z = Kp_angular * angle_error
         
         # Stop if very close
         if distance < 0.05:
-            cmd_vel.linear.x = 0.0
-            cmd_vel.angular.z = 0.0
+
+
             self.goal_pose = None  # Goal reached
         
         # Publish command
         self.counter+=1 
-        if self.counter ==1000:
+        if self.counter ==100:
             print (cmd_vel)
             self.counter=0
         self.cmd_vel_pub.publish(cmd_vel)
